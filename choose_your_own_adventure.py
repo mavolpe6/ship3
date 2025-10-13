@@ -30,27 +30,30 @@ def load_story(file_path: str) -> dict:
 
 
 def start_game(story: dict) -> None:
-    """Begin the adventure using the provided story data.
-
-    This function will handle user input, present choices and traverse
-    the story graph.  In Ship 3 you will get it to print the first scene
-    and prompt for a choice; later ships expand it with loops and state.
-
-    Args:
-        story: The story data structure returned by `load_story`.
-    """
-    
+    """Begin the adventure using the provided story data."""
+    playing = True
     current_scene = "start"
     print(story[current_scene]["text"])
 
-    choices = story[current_scene].get("choices", {})
-    if choices:
+    while playing:
+        choices = story[current_scene].get("choices", {})
+        if not choices:
+            print("The End.")
+            break
+
         print("\nYour choices are:")
         for option in choices:
             print(f"- {option}")
 
         user_choice = input("\nWhat do you choose? ").strip().lower()
 
+        if user_choice in choices:
+            current_scene = choices[user_choice]
+            print(f"DEBUG: Moving to scene '{current_scene}'")
+            print(f"DEBUG: Scene keys: {list(story.keys())}")
+            print("\n" + story[current_scene]["text"])
+        else:
+            print("Invalid choice. Please try again.")
 
 
 
