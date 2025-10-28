@@ -49,11 +49,34 @@ def start_game(story: dict) -> None:
 
         if user_choice in choices:
             current_scene = choices[user_choice]
-            print(f"DEBUG: Moving to scene '{current_scene}'")
-            print(f"DEBUG: Scene keys: {list(story.keys())}")
             print("\n" + story[current_scene]["text"])
         else:
             print("Invalid choice. Please try again.")
+def admin(file_path:str)->None:
+    """Admin function to edit the contents of a file.
+
+    Args:
+        file_path: The path to the file to be read.
+    """
+    story=load_story(file_path)
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            content = file.read()
+            print(content)
+    except FileNotFoundError:
+        print("File not found. Please check the file path.")
+    while True:
+        user_input=input("1)Add a scene → 2) link a choice → 3) edit text → 4) delete a dead end → 5) play start-to-finish.")
+        if user_input == "1":
+            new_scene = input("Enter new scene ID: ")
+            new_text = input("Enter scene text: ")
+            new_choices:[str,str] = {}
+            choices_input:list[str]=input("Enter choices you want to happen seperated by commas")
+            choices_input=choices_input.split(",")
+            Outcomes_input = input("Write the outcomes you want to occur after your choice")
+            new_choices[choices_input]= Outcomes_input
+            story[new_scene] = {"text": new_text, "choices": new_choices}
+        
 
 
 
